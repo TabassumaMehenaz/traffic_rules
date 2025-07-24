@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Dashboard - TrafficApp</title>
+  <link rel="stylesheet" href="styles2.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">TrafficApp - User</div>
+    <ul class="nav-links">
+      <li><a href="index1.html">Home</a></li>
+      <li><a href="#" class="active">Dashboard</a></li>
+      <li><a href="login.html">Logout</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>My Complaints</h2>
+    <div id="userComplaints">Loading...</div>
+  </div>
+
+  <script>
+    // 🔐 Redirect if not logged in
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert("Please login first!");
+      window.location.href = 'login.html';
+    }
+
+    // 📥 Fetch complaints
+    async function fetchUserComplaints() {
+      try {
+        const res = await fetch('http://localhost:3000/api/user/complaints', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const complaints = await res.json();
+        const container = document.getElementById('userComplaints');
+        container.innerHTML = '';
+
+        if (complaints.length === 0) {
+          container.innerHTML = '<p>No complaints submitted yet.</p>';
+          return;
+        }
+
+        complaints.forEach(complaint => {
+          const div = document.createElement('div');
+          div.className = 'complaint-card';
+          div.innerHTML = `
+            <p><strong>Location:</strong> ${complaint.location}</p>
+            <p><strong>Description:</strong> ${complaint.description}</p>
+            <p><strong>Status:</strong> ${complaint.status}</p>
+            <p><strong>Date:</strong> ${new Date(complaint.createdAt).toLocaleString()}</p>
+            <hr />
+          `;
+          container.appendChild(div);
+        });
+      } catch (err) {
+        document.getElementById('userComplaints').innerHTML = 'Error loading your complaints.';
+      }
+    }
+
+    fetchUserComplaints();
+  </script>
+</body>
+</html>

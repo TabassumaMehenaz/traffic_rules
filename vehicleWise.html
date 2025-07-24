@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vehicle Showcase</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="VehicleWise.css" />
+</head>
+<body>
+   <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">TrafficApp</div>
+    <ul class="nav-links">
+      <li><a href="index1.html">Home</a></li>
+      <li><a href="live-map.html">Live Map</a></li>
+      <li><a href="traffic-signs.html">Traffic Signs</a></li>
+      <li><a href="vehicleWise.html" class="active">Traffic Rules</a></li>
+      <li><a href="complaint.html">Complaint Form</a></li>
+      <li><a href="accident-reports.html">Accident Reports</a></li>
+       <li><a href="traffic-quiz.html">Traffic Quiz</a></li>
+    
+    </ul>
+    <div class="profile-menu">
+      <img src="images/user-icon.png" alt="Profile" id="profileIcon" />
+      <div class="dropdown" id="profileDropdown">
+        <a href="#">Profile</a>
+        <a href="login.html">Logout</a>
+      </div>
+    </div>
+    
+  </nav>
+  <!---->
+
+  <div class="wrapper">
+    <!-- Two Wheeler Card -->
+    <div class="vehicle-card">
+      <img src="images/iLLtwo.jpeg" alt="Two Wheeler" class="vehicle-img">
+      <div class="vehicle-info">
+        <span class="vehicle-title">Two Wheeler</span>
+        <button class="icon-btn" onclick="showModal('Two Wheeler', `Passenger Limits:<br>A motorcycle can carry a maximum of one passenger behind the driver, and that person must be seated securely on a proper seat, according to the Laws of Bangladesh.<br><br>Helmet Requirement:<br>Both the driver and any passenger on a motorcycle must wear a helmet of the prescribed type, according to the Laws of Bangladesh.<br><br>Driving License:<br>No one can drive a motorcycle in a public place without a valid license, according to the Laws of Bangladesh.<br><br>Speed Limits:<br>Speed limits are in place for motorcycles, especially in urban areas. For example, in some cities, motorcycles are restricted to a maximum speed of 30 km/h, according to Prothom Alo.<br><br>Lane Discipline:<br>Following lane discipline is crucial for traffic flow and safety, according to the International Drivers Association.<br><br>No Wrong-Side Driving:<br>Driving on the wrong side of the road is strictly prohibited, according to TRW Law Firm.<br><br>No Reckless Driving:<br>Driving recklessly or exceeding speed limits is illegal, according to TRW Law Firm.<br><br>No Riding Without a Plate:<br>Operating a motorcycle without a license plate is illegal, according to TRW Law Firm.`, 'images/iLLtwo.jpeg')">
+          <i class="fas fa-chevron-down"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Three Wheeler Card -->
+    <div class="vehicle-card">
+      <img src="images/iLLthree.jpg" alt="Three Wheeler" class="vehicle-img">
+      <div class="vehicle-info">
+        <span class="vehicle-title">Three Wheeler</span>
+        <button class="icon-btn" onclick="showModal('Three Wheeler', '1. Licensing and DocumentationAlways carry a valid driver’s license.Vehicle must have up-to-date registration, insurance, and pollution under control (PUC) certificate. Display the number plate clearly (front and rear). <br>2. Speed RegulationsObey speed limits posted on roads.Drive slower in school zones, residential areas, and during adverse weather.Use the left lane for slower traffic and right for overtaking, unless otherwise marked. <br>3. Right of WayYield to vehicles already in roundabouts or intersections.  Always give way to emergency vehicles (ambulance, fire truck, police).  Pedestrians have the right of way at crossings. <br> 4. Traffic Signals and Signs Obey traffic lights, road markings, and all road signs. Red = Stop, Green = Go, Amber = Prepare to stop.  Never cross the stop line at signals.','images/iLLthree.jpg')">
+          <i class="fas fa-chevron-down"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="wrapper">
+  <!-- Four Wheeler Card -->
+  <div class="vehicle-card">
+    <img src="images/iLLfour.jpg" alt="Four Wheeler" class="vehicle-img">
+    <div class="vehicle-info">
+      <span class="vehicle-title">Four Wheeler</span>
+      <button class="icon-btn" onclick="showModal('Four Wheeler', 'Passenger Limits:<br>A motorcycle can carry a maximum of one passenger behind the driver, and that person must be seated securely on a proper seat, according to the Laws of Bangladesh.<br><br>Helmet Requirement:<br>Both the driver and any passenger on a motorcycle must wear a helmet of the prescribed type, according to the Laws of Bangladesh.<br><br>Driving License:<br>No one can drive a motorcycle in a public place without a valid license, according to the Laws of Bangladesh.<br><br>Speed Limits:<br>Speed limits are in place for motorcycles, especially in urban areas. For example, in some cities, motorcycles are restricted to a maximum speed of 30 km/h, according to Prothom Alo.<br><br>Lane Discipline:<br>Following lane discipline is crucial for traffic flow and safety, according to the International Drivers Association.<br><br>No Wrong-Side Driving:<br>Driving on the wrong side of the road is strictly prohibited, according to TRW Law Firm.<br><br>No Reckless Driving:<br>Driving recklessly or exceeding speed limits is illegal, according to TRW Law Firm.<br><br>No Riding Without a Plate:<br>Operating a motorcycle without a license plate is illegal, according to TRW Law Firm.', 'images/iLLfour.jpg')">
+        <i class="fas fa-chevron-down"></i>
+      </button>
+    </div>
+  </div>
+
+   <!-- Five Wheeler Card -->
+  <div class="vehicle-card">
+    <img src="images/2six.jpg" alt="6 or more Wheeler" class="vehicle-img">
+    <div class="vehicle-info">
+      <span class="vehicle-title">6 or more Wheeler</span>
+      <button class="icon-btn" onclick="showModal('6 or more wheels', 'Includes auto-rickshaws and e-rickshaws.', 'images/2six.jpg')">
+        <i class="fas fa-chevron-down"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Modal -->
+  <!--<div class="modal" id="vehicleModal"> -->
+
+    <div class="modal" id="vehicleModal" onclick="outsideClick(event)">
+    <div class="modal-box">
+      <span class="close-modal" onclick="hideModal()">×</span>
+      <img id="modal-banner" class="modal-banner" src="" alt="Vehicle Image" />
+      <h2 id="modal-title"></h2>
+      <p id="modal-desc"></p>
+    </div>
+  </div>
+
+  <!--
+  <script>
+    function showModal(title, desc, imgSrc) {
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-desc').innerHTML = desc;
+      document.getElementById('modal-banner').src = imgSrc;
+      document.getElementById('vehicleModal').style.display = 'flex';
+    }
+
+    function hideModal() {
+      document.getElementById('vehicleModal').style.display = 'none';
+    }
+  </script>
+-->
+
+
+<!-- 22222222
+
+<script>
+    function showModal(title, desc, imgSrc) {
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-desc').innerHTML = desc;
+      document.getElementById('modal-banner').src = imgSrc;
+  
+      const modal = document.getElementById('vehicleModal');
+      modal.style.display = 'flex';
+  
+      //Add fade-in animation
+      setTimeout(() => {
+        modal.classList.add('visible');
+      }, 10);
+    }
+  
+    function hideModal() {
+      const modal = document.getElementById('vehicleModal');
+      modal.classList.remove('visible'); //  Remove fade class
+  
+      // Delay hiding to allow animation to finish
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 300);
+    }
+  
+    //  Close modal if clicking outside the box
+    function outsideClick(event) {
+      const modalBox = document.querySelector('.modal-box');
+      if (!modalBox.contains(event.target)) {
+        hideModal();
+      }
+    }
+  </script>
+
+
+  222222-->
+
+<!--
+  <video id="background-video" autoplay muted loop>
+    <source src="videos/background.mp4" type="video/mp4">
+  </video>
+-->
+  
+
+
+
+  <script>
+    function showModal(title, desc, imgSrc) {
+      const modal = document.getElementById('vehicleModal');
+      
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-desc').innerHTML = desc;
+      document.getElementById('modal-banner').src = imgSrc;
+  
+      modal.style.display = 'flex'; // Start displaying
+      requestAnimationFrame(() => {
+        modal.classList.add('visible'); // Trigger fade-in
+      });
+    }
+  
+    function hideModal() {
+      const modal = document.getElementById('vehicleModal');
+      modal.classList.remove('visible'); // Trigger fade-out
+      setTimeout(() => {
+        modal.style.display = 'none'; // Fully hide after fade-out
+      }, 300);
+    }
+  
+    function outsideClick(event) {
+      const modalBox = document.querySelector('.modal-box');
+      if (!modalBox.contains(event.target)) {
+        hideModal();
+      }
+    }
+  </script>
+  
+  
+
+</body>
+
+
+</html>
