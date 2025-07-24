@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Traffic System Web App</title>
+  <link rel="stylesheet" href="styles1.css" />
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+      <div class="logo">TrafficApp</div>
+      <ul class="nav-links">
+        <li><a href="index1.html">Home</a></li>
+        <li><a href="live-map.html">Live Map</a></li>
+        <li><a href="traffic-signs.html">Traffic Signs</a></li>
+        <li><a href="vehicleWise.html" >Traffic Rules</a></li>
+        <li><a href="accident-reports.html">Accident Reports</a></li> <li><a href="complaint.html">Complaint form</a></li> 
+
+       <li><a href="traffic-quiz.html" >Traffic Quiz</a></li>
+       </ul>
+            
+      <div class="profile-menu">
+        <img src="images/user-icon.png" alt="Profile" id="profileIcon" />
+        <div class="dropdown" id="profileDropdown">
+          <a href="login.html">Login</a>
+          <a href="signup.html">Sign Up</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Real-time Traffic Updates for Your City</h1>
+      <p>Stay ahead with live traffic jams, accidents, and alerts.</p>
+      <button class="cta-btn">View Live Map</button>
+    </div>
+  </section>
+
+  <section class="features">
+    <a href="live-map.html" class="feature-card">
+      <img src="images/livemap.png" alt="Live Map Icon" />
+      <h3>Live Traffic Map</h3>
+      <p>See real-time traffic conditions and incidents.</p>
+    </a>
+    <a href="traffic-signs.html" class="feature-card">
+      <img src="images/stop-sign.png" alt="Traffic Signs Icon" />
+      <h3>Traffic Signs</h3>
+      <p>Learn about various traffic signs and their meanings.</p>
+    </a>
+    <a href="traffic-rules.html" class="feature-card">
+      <img src="images/rules.png" alt="Traffic Rules Icon" />
+      <h3>Traffic Rules</h3>
+      <p>Stay updated with the latest traffic regulations.</p>
+    </a>
+    <a href="accident-reports.html" class="feature-card">
+      <img src="images/accident.png" alt="Accident Reports Icon" />
+      <h3>Accident Reports</h3>
+      <p>View latest accident reports in your area.</p>
+    </a>
+    <a href="complaint.html" class="feature-card"> <img src="images/complaint.png" alt="Complaint Icon" />
+      <h3>Complaint Form</h3>
+      <p>Submit a complaint or report an issue.</p>
+    </a>
+  </section>
+
+ <script>
+  // 🌟 Dynamic Profile Dropdown Logic 🌟
+  const profileIcon = document.getElementById('profileIcon');
+  const dropdown = document.getElementById('profileDropdown');
+
+  // Function to update the dropdown content based on localStorage
+  function updateProfileDropdown() {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+
+    if (token) {
+      // User is logged in: show Dashboard and Logout options
+      dropdown.innerHTML = `
+        <a href="${role === 'admin' ? 'admin_dashboard.html' : 'user_dashboard.html'}">Dashboard</a>
+        <a href="#" onclick="logout()">Logout</a>
+      `;
+    } else {
+      // User is logged out: show Login and Sign Up options
+      dropdown.innerHTML = `
+        <a href="login.html">Login</a>
+        <a href="signup.html">Sign Up</a>
+      `;
+    }
+  }
+
+  // Handle profile icon click to toggle dropdown visibility
+  profileIcon.addEventListener('click', (event) => {
+    event.stopPropagation(); // Prevent document click listener from immediately hiding it
+    dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+  });
+
+  // Hide dropdown when clicking outside of it
+  document.addEventListener('click', (e) => {
+    if (!profileIcon.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.style.display = 'none';
+    }
+  });
+
+  // Logout function
+  function logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    // localStorage.removeItem('email'); // Remove email if stored
+    window.location.href = 'login.html'; // Redirect to login page
+  }
+
+  // Call the function when the page loads to set the initial state
+  document.addEventListener('DOMContentLoaded', updateProfileDropdown);
+</script>
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-section contact-info">
+      <h4>Contact Us</h4>
+      <p>Email: support@trafficapp.com</p>
+      <p>Phone: +880 1234 5678</p>
+      <p>Address: 123 Traffic Ave, City</p>
+    </div>
+
+    <div class="footer-section social-media">
+      <h4>Follow Us</h4>
+      <div class="social-icons">
+        <a href="#" aria-label="Facebook"><img src="images/facebook.png" alt="Facebook" /></a>
+        <a href="#" aria-label="Twitter"><img src="images/twitter.png" alt="Twitter" /></a>
+        <a href="#" aria-label="Instagram"><img src="images/instagram.png" alt="Instagram" /></a>
+      </div>
+    </div>
+
+    <div class="footer-section quick-links">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms of Service</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 TrafficApp. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

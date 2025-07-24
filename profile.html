@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Profile - TrafficApp</title>
+  <link rel="stylesheet" href="profile.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">TrafficApp</div>
+    <ul class="nav-links">
+      <li><a href="index1.html">Home</a></li>
+      <li><a href="live-map.html">Live Map</a></li>
+      <li><a href="traffic-signs.html">Traffic Signs</a></li>
+      <li><a href="traffic-rules.html">Traffic Rules</a></li>
+      <li><a href="complaint.html">Complaint Form</a></li>
+      <li><a href="accident-reports.html">Accident Reports</a></li>
+    </ul>
+    <div class="profile-menu">
+      <img src="images/user-icon.png" alt="Profile" id="profileIcon" />
+      <div class="dropdown" id="profileDropdown">
+        <a href="login.html">Login</a>
+        <a href="signup.html">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="profile-container">
+    <h2>User Profile</h2>
+
+    <div class="profile-card">
+      <img id="dpPreview" src="images/user-icon.png" alt="Profile Picture" />
+      <input type="file" id="dpUpload" accept="image/*" />
+      <p><strong>Email:</strong> <span id="userEmail"></span></p>
+      <p><strong>Role:</strong> <span id="userRole"></span></p>
+      <button id="updateProfileBtn">Update Profile</button>
+    </div>
+  </div>
+
+  <script>
+    // 🔐 Redirect if not logged in
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert("Please login first to view your profile!");
+      window.location.href = 'login.html';
+    }
+
+    // 🌟 Dynamic Profile Dropdown Logic 🌟
+    const profileIcon = document.getElementById('profileIcon');
+    const dropdown = document.getElementById('profileDropdown');
+
+    function updateProfileDropdown() {
+      const role = localStorage.getItem('role');
+      if (token) {
+        dropdown.innerHTML = `
+          <a href="${role === 'admin' ? 'admin_dashboard.html' : 'user_dashboard.html'}">Dashboard</a>
+          <a href="#" onclick="logout()">Logout</a>
+        `;
+      } else {
+        dropdown.innerHTML = `
+          <a href="login.html">Login</a>
+          <a href="signup.html">Sign Up</a>
+        `;
+      }
+    }
+
+    profileIcon.addEventListener('click', (event) => {
+      event.stopPropagation();
+      dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!profileIcon.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      window.location.href = 'login.html';
+    }
+
+    // 📥 Fetch and display user profile details
+    async function fetchUserProfile() {
+      try {
+        const res = await fetch('http://localhost:3000/api/profile', { // Assuming you have a /api/profile endpoint
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error('Failed to fetch profile data.');
+        }
+
+        const userData = await res.json();
+        document.getElementById('userEmail').textContent = userData.email || 'N/A';
+        document.getElementById('userRole').textContent = userData.role || 'N/A';
+        // You would also load profile picture here if you have a URL for it
+        // document.getElementById('dpPreview').src = userData.profilePicUrl || 'images/user-icon.png';
+
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        document.getElementById('userEmail').textContent = 'Error loading email';
+        document.getElementById('userRole').textContent = 'Error loading role';
+        alert('Failed to load profile data. Please ensure your backend is running and the /api/profile endpoint is set up correctly.');
+      }
+    }
+
+    // Call functions on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      updateProfileDropdown();
+      fetchUserProfile(); // Call this to load user-specific data
+    });
+
+    // Handle profile picture upload (example, requires backend endpoint)
+    const dpUpload = document.getElementById('dpUpload');
+    const dpPreview = document.getElementById('dpPreview');
+
+    dpUpload.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          dpPreview.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+        // Here you would also send the file to your backend for storage
+        // Example: uploadProfilePicture(file, token);
+      }
+    });
+
+    // Handle profile update button (example, requires backend endpoint)
+    document.getElementById('updateProfileBtn').addEventListener('click', async () => {
+        // You would collect updated data (e.g., new email, if editable)
+        // and send it to a backend endpoint like /api/profile/update
+        alert('Update profile functionality needs backend implementation.');
+    });
+
+  </script>
+
+</body>
+</html>

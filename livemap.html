@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Leaflet Traffic Map</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+  />
+  <style>
+    body, html, #map {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script>
+    // Initialize the map centered on Dhaka
+    const map = L.map('map').setView([23.8103, 90.4125], 12);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(map);
+
+    // Add a basic marker for city center
+    L.marker([23.8103, 90.4125])
+      .addTo(map)
+      .bindPopup('Dhaka City Center')
+      .openPopup();
+
+    // Sample traffic data with severity and description
+    const trafficData = [
+      { lat: 23.8103, lng: 90.4125, severity: 'heavy', description: 'Heavy traffic at XYZ road' },
+      { lat: 23.815, lng: 90.41, severity: 'moderate', description: 'Moderate traffic near ABC intersection' },
+    ];
+
+    // Add colored circle markers for traffic spots
+    trafficData.forEach((spot) => {
+      const color = spot.severity === 'heavy' ? 'red' : 'orange';
+
+      L.circleMarker([spot.lat, spot.lng], {
+        radius: 8,
+        color: color,
+        fillColor: color,
+        fillOpacity: 0.7,
+      })
+        .addTo(map)
+        .bindPopup(`<b>${spot.description}</b>`);
+    });
+  </script>
+
+</body>
+</html>

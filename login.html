@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - TrafficApp</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required />
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <p>Don’t have an account? <a href="signup.html">Signup here</a></p>
+  </div>
+
+  <script>
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+      const res = await fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+      console.log('Login response:', data); // Debug response
+
+      if (res.ok) {
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('role', data.role || 'user');
+          console.log('Token stored:', localStorage.getItem('token')); // Debug storage
+
+          // Redirect after short delay
+          setTimeout(() => {
+            window.location.href = data.role === 'admin' ? 'admin_dashboard.html' : 'user_dashboard.html';
+          }, 100);
+        } else {
+          alert('Login succeeded but no token received.');
+          console.error('No token in login response.');
+        }
+      } else {
+        alert(data.error || "Login failed.");
+      }
+    } catch (err) {
+      alert("Server error. Try again later.");
+      console.error('Login error:', err);
+    }
+  });
+</script>
+
+</body>
+</html>
