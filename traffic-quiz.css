@@ -1,0 +1,116 @@
+/* traffic-quiz.css */
+
+.quiz-container {
+  max-width: 800px;
+  margin: 100px auto 40px auto; /* Adjust top margin to clear navbar */
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  color: #333;
+}
+.quiz-container h2 {
+  text-align: center;
+  color: #162b47;
+  margin-bottom: 30px;
+  font-size: 2.2em;
+}
+.quiz-section {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px dashed #eee;
+}
+.quiz-section:last-of-type {
+  border-bottom: none;
+}
+.question-number {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #4a69bd;
+  margin-bottom: 10px;
+}
+.question-text {
+  font-size: 1.25em;
+  margin-bottom: 15px;
+  color: #333;
+}
+.options-group label {
+  display: block;
+  background-color: #f0f4ff;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid #e0e6f5;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.options-group label:hover {
+  background-color: #e6ecf7;
+  border-color: #c9d8ee;
+}
+.options-group input[type="radio"] {
+  margin-right: 10px;
+}
+.submit-quiz-btn {
+  background-color: #28a745; /* Green submit button */
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2em;
+  cursor: pointer;
+  display: block;
+  width: 50%;
+  margin: 30px auto 0 auto;
+  transition: background-color 0.3s ease;
+}
+.submit-quiz-btn:hover {
+  background-color: #218838;
+}
+
+/* Results Section */
+#quizResults {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 2px solid #ddd;
+  text-align: center;
+}
+#quizResults h3 {
+  color: #162b47;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+}
+#scoreDisplay {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #4a69bd;
+  margin-bottom: 20px;
+}
+.feedback {
+  margin-top: 20px;
+  text-align: left;
+}
+.feedback-item {
+  background-color: #f9f9f9;
+  border-left: 5px solid;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+.feedback-item.correct {
+  border-color: #28a745; /* Green */
+}
+.feedback-item.incorrect {
+  border-color: #dc3545; /* Red */
+}
+.feedback-item p {
+  margin-bottom: 5px;
+}
+.feedback-item .correct-answer {
+  font-weight: bold;
+  color: #28a745;
+}
+.feedback-item .your-answer {
+  font-style: italic;
+  color: #dc3545;
+}

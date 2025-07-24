@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Traffic Law Quiz - TrafficApp</title>
+  <link rel="stylesheet" href="styles1.css" /> <link rel="stylesheet"  href="traffic-quiz.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">TrafficApp</div>
+    <ul class="nav-links">
+      <li><a href="index1.html">Home</a></li>
+      <li><a href="live-map.html">Live Map</a></li>
+      <li><a href="traffic-signs.html">Traffic Signs</a></li>
+     <li><a href="vehicleWise.html" >Traffic  Rules</a></li>
+      <li><a href="complaint.html">Complaint Form</a></li>
+      <li><a href="accident-reports.html">Accident Reports</a></li>
+      <li><a href="traffic-quiz.html" class="active">Traffic Law Quiz</a></li> </ul>
+    <div class="profile-menu">
+      <img src="images/user-icon.png" alt="Profile" id="profileIcon" />
+      <div class="dropdown" id="profileDropdown">
+        </div>
+    </div>
+  </nav>
+
+  <div class="quiz-container">
+    <h2>Test Your Traffic Law Knowledge!</h2>
+
+    <div id="quizQuestions">
+      Loading quiz questions...
+    </div>
+
+    <button id="submitQuizBtn" class="submit-quiz-btn" style="display: none;">Submit Quiz</button>
+
+    <div id="quizResults" style="display: none;">
+      <h3>Quiz Results</h3>
+      <p id="scoreDisplay">Your Score: 0 / 0</p>
+      <div class="feedback" id="feedbackContainer">
+        </div>
+      <button id="retakeQuizBtn" class="submit-quiz-btn" style="background-color: #7f99e1;">Retake Quiz</button>
+    </div>
+  </div>
+
+  <script>
+    const profileIcon = document.getElementById('profileIcon');
+    const dropdown = document.getElementById('profileDropdown');
+
+    function updateProfileDropdown() {
+      const token = localStorage.getItem('token');
+      const role = localStorage.getItem('role');
+
+      if (token) {
+        dropdown.innerHTML = `
+          <a href="${role === 'admin' ? 'admin_dashboard.html' : 'user_dashboard.html'}">Dashboard</a>
+          <a href="#" onclick="logout()">Logout</a>
+        `;
+      } else {
+        dropdown.innerHTML = `
+          <a href="login.html">Login</a>
+          <a href="signup.html">Sign Up</a>
+        `;
+      }
+    }
+
+    profileIcon.addEventListener('click', (event) => {
+      event.stopPropagation();
+      dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!profileIcon.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      window.location.href = 'login.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', updateProfileDropdown);
+  </script>
+
+  <script src="traffic-quiz.js"></script>
+
+</body>
+</html>

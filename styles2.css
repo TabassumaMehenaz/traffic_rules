@@ -1,0 +1,123 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+   
+  background: #f5f9fc;
+  color: #2d3e50;
+  padding: 20px;
+}
+
+/* Navbar (reuse your existing one if you want) */
+.navbar {
+  background-color: #162b47;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links li a {
+  color: #efe3e3;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+  color: #98adc5;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+.dashboard-container h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #162b47;
+}
+
+/* Complaint Cards */
+.complaint-card {
+  background: #f0f4ff;
+  border-left: 5px solid #4a69bd;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+}
+
+.complaint-card:hover {
+  box-shadow: 0 4px 15px rgba(74, 105, 189, 0.3);
+}
+
+.complaint-card p {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.complaint-card strong {
+  color: #3b538f;
+}
+
+/* Status colors */
+.status {
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.status.Pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status.Resolved {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status.Rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Buttons (optional) */
+.button {
+  background: #4a69bd;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+
+.button:hover {
+  background: #3b538f;
+}
