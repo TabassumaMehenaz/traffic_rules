@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Complaint Form - TrafficApp</title>
+  <link rel="stylesheet" href="complaint.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">TrafficApp</div>
+    <ul class="nav-links">
+      <li><a href="index1.html">Home</a></li>
+      <li><a href="live-map.html">Live Map</a></li>
+      <li><a href="traffic-signs.html">Traffic Signs</a></li>
+      <li><a href="vehicleWise.html" >Traffic Rules</a></li>
+      <li><a href="complaint.html" class="active">Complaint Form</a></li>
+      <li><a href="accident-reports.html">Accident Reports</a></li>
+    
+
+        <li><a href="traffic-quiz.html" >Traffic Quiz</a></li>
+        </ul>
+
+        
+    <div class="profile-menu">
+      <img src="images/user-icon.png" alt="Profile" id="profileIcon" />
+      <div class="dropdown" id="profileDropdown">
+        <a href="#">Profile</a>
+        <a href="login.html">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="complaint-image">
+    <video autoplay muted loop playsinline>
+      <source src="images/complaint-video.mp4" type="video/mp4" />
+      Sorry, your browser does not support the video tag.
+    </video>
+  </div>
+
+  <div class="complaint-form">
+    <h2>Submit a Traffic Complaint</h2>
+    <form id="complaintForm">
+      <label for="email">Your Email:</label>
+      <input type="email" id="email" required placeholder="example@mail.com" />
+
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" required pattern="[0-9]{10,15}" placeholder="e.g. 017XXXXXXXX" />
+
+      <label for="location">Accident Location:</label>
+      <input type="text" id="location" required placeholder="Where did it happen?" />
+
+      <label for="description">Accident Description:</label>
+      <textarea id="description" rows="5" required placeholder="Describe what happened..."></textarea>
+
+      <button type="submit">Submit Complaint</button>
+    </form>
+    <div id="submitMessage" class="submit-message"></div> </div>
+
+  <script>
+    // 🔐 Check token and redirect if not logged in
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('You need to log in first to submit a complaint!');
+      window.location.href = 'login.html';
+    }
+
+    // 🌟 Handle dynamic profile dropdown (same as in com.html/index1.html)
+    const profileIcon = document.getElementById('profileIcon');
+    const dropdown = document.getElementById('profileDropdown');
+
+    function updateProfileDropdown() {
+      const currentToken = localStorage.getItem('token'); // Re-check in case it changed
+      const role = localStorage.getItem('role');
+
+      if (currentToken) {
+        dropdown.innerHTML = `
+          <a href="${role === 'admin' ? 'admin_dashboard.html' : 'user_dashboard.html'}">Dashboard</a>
+          <a href="#" onclick="logout()">Logout</a>
+        `;
+      } else {
+        dropdown.innerHTML = `
+          <a href="login.html">Login</a>
+          <a href="signup.html">Sign Up</a>
+        `;
+      }
+    }
+
+    profileIcon.addEventListener('click', () => {
+      dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!profileIcon.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      // If you stored email in localStorage, remove it too
+      // localStorage.removeItem('email');
+      window.location.href = 'login.html';
+    }
+
+    // 📥 Handle Complaint Form Submission
+    const complaintForm = document.getElementById('complaintForm');
+    const message = document.getElementById('submitMessage'); // This is the div for messages
+
+    // Optional: Pre-fill email from token if user is logged in (recommended)
+    // For this to work, ensure your login.html saves data.email to localStorage
+    const storedEmail = localStorage.getItem('email');
+    if (storedEmail) {
+      document.getElementById('email').value = storedEmail;
+      document.getElementById('email').readOnly = true; // Make it non-editable
+    }
+
+
+    complaintForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        // You can remove this 'email' field from 'data' if your backend exclusively
+        // uses req.user.email from the token. However, if you keep the form field
+        // it's fine to send it.
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        location: document.getElementById('location').value,
+        description: document.getElementById('description').value
+      };
+
+      try {
+        const res = await fetch('http://localhost:3000/api/complaints', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // ⭐ THE CRITICAL ADDITION ⭐
+          },
+          body: JSON.stringify(data)
+        });
+
+        const responseData = await res.json();
+
+        if (res.ok) {
+          message.textContent = responseData.message || "Complaint submitted successfully!";
+          message.className = 'submit-message success show'; // Add 'success' class for styling
+          complaintForm.reset();
+          // If email was pre-filled and readOnly, reset should handle it, but you might need to re-set it
+          if (storedEmail) document.getElementById('email').value = storedEmail;
+        } else {
+          message.textContent = responseData.error || "Failed to submit complaint.";
+          message.className = 'submit-message error show'; // Add 'error' class for styling
+        }
+        setTimeout(() => message.classList.remove('show'), 3000); // Hide message after 3 seconds
+
+      } catch (err) {
+        console.error("Error submitting complaint:", err);
+        message.textContent = "Network error or server unreachable. Please try again.";
+        message.className = 'submit-message error show';
+        setTimeout(() => message.classList.remove('show'), 3000);
+      }
+    });
+
+    // Call updateProfileDropdown on page load
+    updateProfileDropdown();
+  </script>
+
+  </body>
+</html>

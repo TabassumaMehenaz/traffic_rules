@@ -1,0 +1,147 @@
+/* accident.css */
+
+/* Basic Layout */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f8fb;
+  justify-content: space-between;
+  color: #2c3e50;
+  margin: 0;
+  padding: 0;
+}
+
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.navbar {
+  background-color: #162b47;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-weight: 700;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+  color: #98adc5;
+}
+
+.profile-menu {
+  position: relative;
+  cursor: pointer;
+}
+
+.profile-menu img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.dropdown {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  background: #f0f4ff;
+  color: #24385b;
+  border-radius: 5px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  display: none;
+  flex-direction: column;
+}
+
+.dropdown a {
+  padding: 12px 15px;
+  text-decoration: none;
+  color: #24385b;
+  font-weight: 600;
+}
+
+.dropdown a:hover {
+  background-color: #a3b0d9;
+  color: white;
+}
+
+/* Main Content */
+.accident-reports-container {
+  padding: 30px;
+  max-width: 1200px;
+  margin: 30px auto;
+}
+
+h2 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.chart-container {
+  margin-bottom: 40px;
+  max-width: 100%;
+  display: flex;
+  justify-content: center; /* Center the charts */
+  align-items: center; 
+}
+
+.reports-list {
+  margin-top: 40px;
+}
+
+.report-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.report-card h4 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.report-card p {
+  font-size: 1.1rem;
+  color: #34495e;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .chart-container {
+    width: 100%;
+  }
+}
+
+
+canvas {
+  max-width: 100%; /* Make sure the chart doesn’t overflow */
+  max-height: 400px; /* Adjust this to the size you prefer */
+  width: 80%;        /* Set a default width */
+}

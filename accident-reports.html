@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Accident Reports - TrafficApp</title>
+  <link rel="stylesheet" href="accident-reports.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">TrafficApp</div>
+    <ul class="nav-links">
+      <li><a href="index1.html">Home</a></li>
+      <li><a href="live-map.html">Live Map</a></li>
+      <li><a href="traffic-signs.html">Traffic Signs</a></li>
+     <li><a href="vehicleWise.html" >Traffic  Rules</a></li>
+      <li><a href="complaint.html">Complaint Form</a></li>
+      <li><a href="accident-reports.html" class="active">Accident Reports</a></li>
+      <li><a href="traffic-quiz.html" >Traffic Quiz</a></li>
+    </ul>
+    <div class="profile-menu">
+      <img src="images/user-icon.png" alt="Profile" id="profileIcon" />
+      <div class="dropdown" id="profileDropdown">
+        </div>
+    </div>
+  </nav>
+
+  <div class="accident-reports-container">
+    <h2>Accident Reports Overview</h2>
+
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;">
+      <div class="chart-wrapper" style="flex: 1; min-width: 300px; max-width: 45%;">
+        <h3>Accidents by Severity</h3>
+        <canvas id="accidentPieChart"></canvas>
+      </div>
+
+      <div class="chart-wrapper" style="flex: 1; min-width: 300px; max-width: 45%;">
+        <h3>Accidents by Area</h3>
+        <canvas id="accidentBarChart"></canvas>
+      </div>
+    </div>
+    
+    <section class="reports-list">
+      <h3>All Accident Reports</h3>
+      <p>Loading reports...</p> 
+    </section>
+  </div>
+
+  <script>
+    // 🔐 Check for login token and redirect if not present
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('You need to log in first to view accident reports!');
+      window.location.href = 'login.html';
+    }
+
+    // 🌟 Dynamic Profile Dropdown Logic 🌟
+    const profileIcon = document.getElementById('profileIcon');
+    const dropdown = document.getElementById('profileDropdown');
+
+    // Function to update the dropdown content based on localStorage
+    function updateProfileDropdown() {
+      const role = localStorage.getItem('role');
+      if (token) {
+        // User is logged in: show Dashboard and Logout options
+        dropdown.innerHTML = `
+          <a href="${role === 'admin' ? 'admin_dashboard.html' : 'user_dashboard.html'}">Dashboard</a>
+          <a href="#" onclick="logout()">Logout</a>
+        `;
+      } else {
+        // User is logged out: show Login and Sign Up options
+        dropdown.innerHTML = `
+          <a href="login.html">Login</a>
+          <a href="signup.html">Sign Up</a>
+        `;
+      }
+    }
+
+    // Handle profile icon click to toggle dropdown visibility
+    profileIcon.addEventListener('click', (event) => {
+      event.stopPropagation(); // Prevent document click listener from immediately hiding it
+      dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    // Hide dropdown when clicking outside of it
+    document.addEventListener('click', (e) => {
+      if (!profileIcon.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      window.location.href = 'login.html'; // Redirect to login page
+    }
+
+    // 📥 Fetch and render reports
+    async function fetchAndRenderReports() {
+      try {
+        const response = await fetch('http://localhost:3000/api/reports', {
+          headers: {
+            'Authorization': 'Bearer ' + token // Added authorization header
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const reports = await response.json();
+
+        // Calculate frequency of each area
+        const locationFrequency = {};
+        reports.forEach(r => {
+          const loc = r.area || 'Unknown';
+          locationFrequency[loc] = (locationFrequency[loc] || 0) + 1;
+        });
+
+        const severityCounts = { 'High Severity': 0, 'Moderate Severity': 0, 'Low Severity': 0 };
+        const areaCounts = {};
+
+        reports.forEach(report => {
+          const loc = report.area || 'Unknown';
+          const count = locationFrequency[loc];
+
+          let severity = 'Low';
+          if (count >= 3) severity = 'High';
+          else if (count === 2) severity = 'Moderate';
+
+          severityCounts[severity + ' Severity']++;
+          areaCounts[loc] = (areaCounts[loc] || 0) + 1;
+
+          // Attach calculated data
+          report._calculatedSeverity = severity;
+          report._area = loc;
+          report._incidentDescription = report.incidentDescription || 'No description';
+        });
+
+        // Chart Data
+        const pieData = {
+          labels: Object.keys(severityCounts),
+          datasets: [{
+            data: Object.values(severityCounts),
+            backgroundColor: ['#ff5733', '#ffcc00', '#28a745'],
+            hoverOffset: 4
+          }]
+        };
+
+        const barData = {
+          labels: Object.keys(areaCounts),
+          datasets: [{
+            label: 'Number of Accidents',
+            data: Object.values(areaCounts),
+            backgroundColor: '#007bff',
+            borderColor: '#0056b3',
+            borderWidth: 1
+          }]
+        };
+
+        // Render Pie Chart
+        const pieCtx = document.getElementById('accidentPieChart').getContext('2d'); // Corrected ID
+        if (window.myPieChart) window.myPieChart.destroy();
+        window.myPieChart = new Chart(pieCtx, {
+          type: 'pie',
+          data: pieData,
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: 'top' },
+              title: { display: false }
+            }
+          }
+        });
+
+        // Render Bar Chart
+        const barCtx = document.getElementById('accidentBarChart').getContext('2d'); // Corrected ID
+        if (window.myBarChart) window.myBarChart.destroy();
+        window.myBarChart = new Chart(barCtx, {
+          type: 'bar',
+          data: barData,
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+              title: { display: false }
+            },
+            scales: {
+              y: { beginAtZero: true, title: { display: true, text: 'Number of Accidents' } },
+              x: { 
+                title: { display: true, text: 'Area' },
+                ticks: {
+                  maxRotation: 0,
+                  minRotation: 0
+                }
+              }
+            }
+          }
+        });
+
+        // Render report list
+        const reportsListContainer = document.querySelector('.reports-list');
+        reportsListContainer.innerHTML = '<h3>All Accident Reports</h3>';
+
+        if (reports.length === 0) {
+          reportsListContainer.innerHTML += '<p>No accident reports found.</p>';
+        } else {
+          reports.forEach(report => {
+            const reportCard = `
+              <div class="report-card">
+                <h4>Area: ${report._area}</h4>
+                <p><strong>Severity:</strong> ${report._calculatedSeverity}</p>
+                <p><strong>Incident:</strong> ${report._incidentDescription}</p>
+                <p><strong>Date:</strong> ${report.date ? new Date(report.date).toLocaleDateString() : 'N/A'}</p>
+              </div>
+            `;
+            reportsListContainer.insertAdjacentHTML('beforeend', reportCard);
+          });
+        }
+
+      } catch (error) {
+        console.error('Error fetching or rendering reports:', error);
+        const reportsListContainer = document.querySelector('.reports-list');
+        reportsListContainer.innerHTML = '<h3>All Accident Reports</h3><p style="color: red;">Failed to load accident reports. Please ensure your backend server is running and accessible, and that your token is valid.</p>';
+      }
+    }
+
+    // Call functions on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      updateProfileDropdown(); // Now correctly calls the function
+      fetchAndRenderReports();
+    });
+  </script>
+
+</body>
+</html>
